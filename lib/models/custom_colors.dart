@@ -6,8 +6,8 @@ class CustomColors {
   static const MaterialColor primaryColor = const MaterialColor(
     _primary,
     const <int, Color>{
-      50: const Color(0xFF00154F),
-      100: const Color(0xFF00154F),
+      50: const Color(0xFF204BC0),
+      100: const Color(0xFF204BC0),
       200: const Color(0xFF00154F),
       300: const Color(0xFF00154F),
       400: const Color(0xFF00154F),
