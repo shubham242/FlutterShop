@@ -7,7 +7,7 @@ import '../providers/product.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(context, listen: false);
     return Stack(
       children: [
         ClipRRect(
@@ -62,16 +62,18 @@ class ProductItem extends StatelessWidget {
           top: 5,
           right: -10,
           child: Container(
-            child: FloatingActionButton(
-              backgroundColor: Theme.of(context).canvasColor,
-              child: Icon(
-                Icons.favorite,
-                color: product.isFav ? Colors.red : Colors.grey[350],
-                size: 25,
+            child: Consumer<Product>(
+              builder: (ctx, product, _) => FloatingActionButton(
+                backgroundColor: Theme.of(context).canvasColor,
+                child: Icon(
+                  Icons.favorite,
+                  color: product.isFav ? Colors.red : Colors.grey[350],
+                  size: 25,
+                ),
+                onPressed: () {
+                  product.toggleFav();
+                },
               ),
-              onPressed: () {
-                product.toggleFav();
-              },
             ),
           ),
         ),
