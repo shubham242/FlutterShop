@@ -57,6 +57,7 @@ class ProductItem extends StatelessWidget {
                         product.id,
                         product.price,
                         product.title,
+                        product.imageUrl,
                       );
                     },
                   ),
@@ -75,7 +76,7 @@ class ProductItem extends StatelessWidget {
                 backgroundColor: Theme.of(context).canvasColor,
                 child: Icon(
                   Icons.favorite,
-                  color: product.isFav ? Colors.red : Colors.grey[350],
+                  color: product.isFav ? Color(0xFFff4342) : Colors.grey[350],
                   size: 25,
                 ),
                 onPressed: () {
