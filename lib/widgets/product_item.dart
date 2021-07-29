@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../widgets/show_alert.dart';
 
 class ProductItem extends StatelessWidget {
   @override
@@ -45,21 +46,29 @@ class ProductItem extends StatelessWidget {
                 ),
                 trailing: Container(
                   width: 20,
-                  child: IconButton(
-                    padding: EdgeInsets.all(0),
-                    icon: Icon(
-                      Icons.shopping_cart,
-                      size: 20,
+                  child: Consumer<Cart>(
+                    builder: (_, ctx, __) => IconButton(
+                      padding: EdgeInsets.all(0),
+                      icon: ctx.items.containsKey(product.id)
+                          ? Icon(
+                              Icons.shopping_cart,
+                              size: 25,
+                            )
+                          : Icon(
+                              Icons.shopping_cart_outlined,
+                              size: 25,
+                            ),
+                      color: Theme.of(context).accentColor,
+                      onPressed: () {
+                        cart.addItem(
+                          product.id,
+                          product.price,
+                          product.title,
+                          product.imageUrl,
+                        );
+                        showAlertDialog(context);
+                      },
                     ),
-                    color: Theme.of(context).accentColor,
-                    onPressed: () {
-                      cart.addItem(
-                        product.id,
-                        product.price,
-                        product.title,
-                        product.imageUrl,
-                      );
-                    },
                   ),
                 ),
               ),
@@ -73,6 +82,7 @@ class ProductItem extends StatelessWidget {
           child: Container(
             child: Consumer<Product>(
               builder: (ctx, product, _) => FloatingActionButton(
+                heroTag: product.id,
                 backgroundColor: Theme.of(context).canvasColor,
                 child: Icon(
                   Icons.favorite,

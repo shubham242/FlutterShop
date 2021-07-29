@@ -71,6 +71,7 @@ class CartItems extends StatelessWidget {
                           width: 20,
                           child: FittedBox(
                             child: FloatingActionButton(
+                              heroTag: Text('bt1'),
                               shape: RoundedRectangleBorder(),
                               onPressed: () {
                                 Provider.of<Cart>(context, listen: false)
@@ -93,6 +94,7 @@ class CartItems extends StatelessWidget {
                           child: FittedBox(
                             child: Container(
                               child: FloatingActionButton(
+                                heroTag: Text('bt2'),
                                 shape: RoundedRectangleBorder(),
                                 onPressed: () {
                                   Provider.of<Cart>(context, listen: false)
