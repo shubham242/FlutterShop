@@ -55,7 +55,7 @@ class ProductDetail extends StatelessWidget {
                   trailing: Container(
                     width: 20,
                     child: Consumer<Cart>(
-                      builder: (_, ctx, __) => IconButton(
+                      builder: (cont, ctx, __) => IconButton(
                         padding: EdgeInsets.all(0),
                         icon: ctx.items.containsKey(product.id)
                             ? Icon(
@@ -74,7 +74,19 @@ class ProductDetail extends StatelessWidget {
                             product.title,
                             product.imageUrl,
                           );
-                          showAlertDialog(context);
+                          Scaffold.of(cont).hideCurrentSnackBar();
+                          Scaffold.of(cont).showSnackBar(
+                            SnackBar(
+                              content: Text('Item Added to Cart'),
+                              duration: Duration(seconds: 2),
+                              action: SnackBarAction(
+                                label: 'UNDO',
+                                onPressed: () {
+                                  cart.removeSingleItem(product.id);
+                                },
+                              ),
+                            ),
+                          );
                         },
                       ),
                     ),
