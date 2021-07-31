@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/product.dart';
+import '../providers/products.dart';
 
 class EditProducts extends StatefulWidget {
   static const routeName = '/edit-product';
@@ -7,7 +11,23 @@ class EditProducts extends StatefulWidget {
 }
 
 class _EditProductState extends State<EditProducts> {
-  TextEditingController _imageUrlCont = TextEditingController();
+  final TextEditingController _imageUrlCont = TextEditingController();
+  final _form = GlobalKey<FormState>();
+  var _newProduct = Product(
+    id: '',
+    title: '',
+    description: '',
+    price: 0,
+    imageUrl: '',
+  );
+
+  var _initValues = {
+    'title': '',
+    'description': '',
+    'price': '',
+    'iamgeUrl': ''
+  };
+  var _isInit = true;
 
   @override
   void dispose() {
@@ -24,12 +44,63 @@ class _EditProductState extends State<EditProducts> {
   }
 
   @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      final productId = ModalRoute.of(context)?.settings.arguments as String?;
+      if (productId != null) {
+        _newProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
+        _initValues = {
+          'title': _newProduct.title,
+          'description': _newProduct.description,
+          'price': _newProduct.price.toString(),
+          'imageUrl': '',
+        };
+        _imageUrlCont.text = _newProduct.imageUrl;
+      }
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
+  void _saveForm() {
+    final isValid = _form.currentState?.validate();
+    if (!isValid!) {
+      return;
+    }
+    _form.currentState?.save();
+    if (_newProduct.id != '') {
+      Provider.of<Products>(context, listen: false)
+          .updateProduct(_newProduct.id, _newProduct);
+    } else {
+      Provider.of<Products>(context, listen: false).addProduct(_newProduct);
+    }
+    Navigator.of(context).pop();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Edit Product')),
+      appBar: AppBar(
+        title: Text('Edit Product'),
+        actions: [
+          FlatButton(
+            onPressed: _saveForm,
+            child: Text(
+              'Submit',
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
+          key: _form,
           child: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(20),
@@ -43,21 +114,80 @@ class _EditProductState extends State<EditProducts> {
                 color: Colors.white,
               ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   TextFormField(
+                    initialValue: _initValues['title'],
                     decoration: InputDecoration(labelText: 'Title'),
                     textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please Enter a Title.';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _newProduct = Product(
+                        id: _newProduct.id,
+                        isFav: _newProduct.isFav,
+                        title: value!,
+                        description: _newProduct.description,
+                        price: _newProduct.price,
+                        imageUrl: _newProduct.imageUrl,
+                      );
+                    },
                   ),
                   TextFormField(
+                    initialValue: _initValues['price'],
                     decoration: InputDecoration(labelText: 'Price'),
                     keyboardType: TextInputType.number,
                     textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please Enter a Price.';
+                      }
+                      if (double.tryParse(value) == null) {
+                        return 'Please Enter a Valid Number';
+                      }
+                      if (double.parse(value) <= 0) {
+                        return 'Please Enter a Number greater than 0';
+                      }
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _newProduct = Product(
+                        id: _newProduct.id,
+                        isFav: _newProduct.isFav,
+                        title: _newProduct.title,
+                        description: _newProduct.description,
+                        price: double.parse(value!),
+                        imageUrl: _newProduct.imageUrl,
+                      );
+                    },
                   ),
                   TextFormField(
+                    initialValue: _initValues['description'],
                     decoration: InputDecoration(labelText: 'Description'),
                     maxLines: 3,
                     keyboardType: TextInputType.multiline,
                     textInputAction: TextInputAction.done,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Please Enter a Description.';
+                      }
+
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _newProduct = Product(
+                        id: _newProduct.id,
+                        isFav: _newProduct.isFav,
+                        title: _newProduct.title,
+                        description: value!,
+                        price: _newProduct.price,
+                        imageUrl: _newProduct.imageUrl,
+                      );
+                    },
                   ),
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.end,
@@ -85,10 +215,51 @@ class _EditProductState extends State<EditProducts> {
                           keyboardType: TextInputType.url,
                           textInputAction: TextInputAction.done,
                           controller: _imageUrlCont,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Please enter an image URL.';
+                            }
+                            if (!value.startsWith('http') &&
+                                !value.startsWith('https')) {
+                              return 'Please enter a valid URL.';
+                            }
+                            if (!value.endsWith('.png') &&
+                                !value.endsWith('.jpg') &&
+                                !value.endsWith('.jpeg')) {
+                              return 'Please enter a valid image URL.';
+                            }
+                            return null;
+                          },
+                          onFieldSubmitted: (_) {
+                            _saveForm();
+                          },
+                          onSaved: (value) {
+                            _newProduct = Product(
+                              id: _newProduct.id,
+                              isFav: _newProduct.isFav,
+                              title: _newProduct.title,
+                              description: _newProduct.description,
+                              price: _newProduct.price,
+                              imageUrl: value!,
+                            );
+                          },
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  SizedBox(height: 10),
+                  RaisedButton(
+                    color: Theme.of(context).primaryColor,
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    onPressed: _saveForm,
+                  ),
                 ],
               ),
             ),
