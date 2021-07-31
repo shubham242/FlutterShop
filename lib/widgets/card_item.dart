@@ -26,15 +26,18 @@ class CartItems extends StatelessWidget {
       builder: (_, ctx, __) => Dismissible(
         key: ValueKey(id),
         direction: DismissDirection.endToStart,
-        background: Container(
-          margin: EdgeInsets.symmetric(vertical: 4),
-          padding: EdgeInsets.only(right: 20),
-          alignment: Alignment.centerRight,
-          color: Theme.of(context).errorColor,
-          child: Icon(
-            Icons.delete,
-            color: Colors.white,
-            size: 30,
+        background: Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: Container(
+            margin: EdgeInsets.symmetric(vertical: 4, horizontal: 10),
+            padding: EdgeInsets.only(right: 20),
+            alignment: Alignment.centerRight,
+            color: Theme.of(context).errorColor,
+            child: Icon(
+              Icons.delete,
+              color: Colors.white,
+              size: 30,
+            ),
           ),
         ),
         onDismissed: (direction) {
@@ -49,8 +52,9 @@ class CartItems extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 3, horizontal: 8),
             child: ListTile(
               leading: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: FittedBox(child: Image.network(imageUrl.toString())),
+                // backgroundColor: Colors.white,
+                // child: FittedBox(child: Image.network(imageUrl.toString())),
+                backgroundImage: NetworkImage(imageUrl),
               ),
               title: Text(title),
               subtitle:
