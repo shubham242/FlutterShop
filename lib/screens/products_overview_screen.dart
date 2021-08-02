@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/cart.dart';
+import '../providers/products.dart';
 import '../screens/cart_screen.dart';
 import '../widgets/products_grid.dart';
 import '../widgets/badge.dart';
@@ -19,6 +20,23 @@ class ProductsOverview extends StatefulWidget {
 
 class _ProductsOverviewState extends State<ProductsOverview> {
   bool _showFav = false;
+  bool _isInit = true;
+  bool _isLoad = false;
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      _isLoad = true;
+      Provider.of<Products>(context).fetchProducts().then((_) {
+        setState(() {
+          _isLoad = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,7 +80,11 @@ class _ProductsOverviewState extends State<ProductsOverview> {
           ),
         ],
       ),
-      body: ProductsGridView(_showFav),
+      body: _isLoad
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : ProductsGridView(_showFav),
     );
   }
 }
