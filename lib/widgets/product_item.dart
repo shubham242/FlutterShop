@@ -9,6 +9,7 @@ import '../widgets/show_alert.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final scaf = Scaffold.of(context);
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
     return Stack(
@@ -104,8 +105,19 @@ class ProductItem extends StatelessWidget {
                   color: product.isFav ? Color(0xFFff4342) : Colors.grey[350],
                   size: 25,
                 ),
-                onPressed: () {
-                  product.toggleFav();
+                onPressed: () async {
+                  try {
+                    await product.toggleFav();
+                  } catch (error) {
+                    scaf.showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Unable to mark as Favorite!',
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    );
+                  }
                 },
               ),
             ),

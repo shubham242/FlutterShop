@@ -63,25 +63,7 @@ class CartScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    RaisedButton(
-                      color: Theme.of(context).accentColor,
-                      onPressed: () {
-                        Provider.of<Orders>(context, listen: false).addOrder(
-                          cart.items.values.toList(),
-                          cart.totalAmount,
-                        );
-                        cart.clearCart();
-                      },
-                      child: Text(
-                        'Place Order',
-                        style: TextStyle(
-                            fontSize: 16,
-                            color: Theme.of(context)
-                                .primaryTextTheme
-                                .title
-                                ?.color),
-                      ),
-                    )
+                    OrderButton(cart)
                   ],
                 ),
               ),
@@ -89,6 +71,47 @@ class CartScreen extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class OrderButton extends StatefulWidget {
+  final Cart cart;
+  const OrderButton(this.cart);
+
+  @override
+  _OrderButtonState createState() => _OrderButtonState();
+}
+
+class _OrderButtonState extends State<OrderButton> {
+  var _isLoad = false;
+  @override
+  Widget build(BuildContext context) {
+    return RaisedButton(
+      color: Theme.of(context).accentColor,
+      onPressed: (widget.cart.totalAmount <= 0 || _isLoad)
+          ? null
+          : () async {
+              setState(() {
+                _isLoad = true;
+              });
+              await Provider.of<Orders>(context, listen: false).addOrder(
+                widget.cart.items.values.toList(),
+                widget.cart.totalAmount,
+              );
+              setState(() {
+                _isLoad = false;
+              });
+              widget.cart.clearCart();
+            },
+      child: _isLoad
+          ? Container(width: 25, height: 25, child: CircularProgressIndicator())
+          : Text(
+              'Place Order',
+              style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).primaryTextTheme.title?.color),
+            ),
     );
   }
 }
