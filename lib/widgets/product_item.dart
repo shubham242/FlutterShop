@@ -109,7 +109,7 @@ class ProductItem extends StatelessWidget {
                 ),
                 onPressed: () async {
                   try {
-                    await product.toggleFav(authData.token!);
+                    await product.toggleFav(authData.token, authData.userId);
                   } catch (error) {
                     scaf.showSnackBar(
                       SnackBar(

@@ -22,20 +22,16 @@ class Product with ChangeNotifier {
     this.isFav = false,
   });
 
-  Future<void> toggleFav(String token) async {
+  Future<void> toggleFav(String token, String userId) async {
     bool old = isFav;
     isFav = !isFav;
     notifyListeners();
     Uri url = Uri.parse(
-        'https://shop-app-af659-default-rtdb.firebaseio.com/products/$id.json?auth=$token');
+        'https://shop-app-af659-default-rtdb.firebaseio.com/userFavorites/$userId/$id.json?auth=$token');
     try {
-      final res = await http.patch(
+      final res = await http.put(
         url,
-        body: json.encode(
-          {
-            'isFav': isFav,
-          },
-        ),
+        body: json.encode(isFav),
       );
       if (res.statusCode >= 400) {
         isFav = old;

@@ -10,7 +10,8 @@ class Products with ChangeNotifier {
   List<Product> _items = [];
 
   final String authToken;
-  Products(this.authToken, this._items);
+  final String userId;
+  Products(this.authToken, this.userId, this._items);
 
   List<Product> get items {
     return [..._items];
@@ -20,15 +21,21 @@ class Products with ChangeNotifier {
     return _items.where((elem) => elem.isFav).toList();
   }
 
-  Future<Null> fetchProducts() async {
-    Uri url = Uri.parse(
-        'https://shop-app-af659-default-rtdb.firebaseio.com/products.json?auth=$authToken');
+  Future<Null> fetchProducts([bool filter = false]) async {
+    Uri url = filter
+        ? Uri.parse(
+            'https://shop-app-af659-default-rtdb.firebaseio.com/products.json?auth=$authToken&orderBy="creatorId"&equalTo="$userId"')
+        : Uri.parse(
+            'https://shop-app-af659-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final res = await http.get(url);
       final data = json.decode(res.body) as Map<String, dynamic>?;
-      final List<Product> prodList = [];
       if (data == null) return;
-
+      Uri url2 = Uri.parse(
+          'https://shop-app-af659-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken');
+      final List<Product> prodList = [];
+      final favRes = await http.get(url2);
+      final favData = json.decode(favRes.body);
       data.forEach((prodId, value) {
         prodList.add(Product(
           id: prodId,
@@ -36,7 +43,7 @@ class Products with ChangeNotifier {
           description: value['description'],
           price: value['price'],
           imageUrl: value['imageUrl'],
-          isFav: value['isFav'],
+          isFav: favData == null ? false : favData[prodId] ?? false,
         ));
       });
       _items = prodList;
@@ -57,7 +64,7 @@ class Products with ChangeNotifier {
           'description': product.description,
           'price': product.price,
           'imageUrl': product.imageUrl,
-          'isFav': product.isFav
+          'creatorId': userId
         }),
       );
 

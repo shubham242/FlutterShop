@@ -45,7 +45,7 @@ class Buying extends StatelessWidget {
             Colors.black,
             ctx.isFav ? 'Remove from Favorites' : 'Add to Favorites',
             () {
-              ctx.toggleFav(authData.token!);
+              ctx.toggleFav(authData.token, authData.userId);
             },
           ),
         ),
