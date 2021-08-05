@@ -22,12 +22,12 @@ class Product with ChangeNotifier {
     this.isFav = false,
   });
 
-  Future<void> toggleFav() async {
+  Future<void> toggleFav(String token) async {
     bool old = isFav;
     isFav = !isFav;
     notifyListeners();
     Uri url = Uri.parse(
-        'https://shop-app-af659-default-rtdb.firebaseio.com/products/$id.json');
+        'https://shop-app-af659-default-rtdb.firebaseio.com/products/$id.json?auth=$token');
     try {
       final res = await http.patch(
         url,

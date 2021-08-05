@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
+import '../providers/auth.dart';
 import '../widgets/show_alert.dart';
 
 class ProductItem extends StatelessWidget {
@@ -12,6 +13,7 @@ class ProductItem extends StatelessWidget {
     final scaf = Scaffold.of(context);
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
     return Stack(
       children: [
         ClipRRect(
@@ -107,7 +109,7 @@ class ProductItem extends StatelessWidget {
                 ),
                 onPressed: () async {
                   try {
-                    await product.toggleFav();
+                    await product.toggleFav(authData.token!);
                   } catch (error) {
                     scaf.showSnackBar(
                       SnackBar(

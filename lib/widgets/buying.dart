@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/product.dart';
 import '../providers/cart.dart';
-import '../widgets/show_alert.dart';
+import '../providers/auth.dart';
 
 class Buying extends StatelessWidget {
   Widget buildBtn(
@@ -34,6 +34,7 @@ class Buying extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context);
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
@@ -44,7 +45,7 @@ class Buying extends StatelessWidget {
             Colors.black,
             ctx.isFav ? 'Remove from Favorites' : 'Add to Favorites',
             () {
-              ctx.toggleFav();
+              ctx.toggleFav(authData.token!);
             },
           ),
         ),
