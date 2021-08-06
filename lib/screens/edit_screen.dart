@@ -13,6 +13,7 @@ class EditProducts extends StatefulWidget {
 class _EditProductState extends State<EditProducts> {
   final TextEditingController _imageUrlCont = TextEditingController();
   final _form = GlobalKey<FormState>();
+  var head = 'Add Product';
   var _newProduct = Product(
     id: null,
     title: '',
@@ -49,6 +50,7 @@ class _EditProductState extends State<EditProducts> {
     if (_isInit) {
       final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
+        head = 'Edit Product';
         _newProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
         _initValues = {
@@ -73,8 +75,7 @@ class _EditProductState extends State<EditProducts> {
     setState(() {
       _isLoading = true;
     });
-    if (_newProduct.id != '') {
-      print('hello');
+    if (_newProduct.id != null) {
       await Provider.of<Products>(context, listen: false)
           .updateProduct(_newProduct.id, _newProduct);
 
@@ -111,7 +112,7 @@ class _EditProductState extends State<EditProducts> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Product'),
+        title: Text(head),
         actions: [
           FlatButton(
             onPressed: _saveForm,
