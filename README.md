@@ -1,5 +1,15 @@
 # Shop_App
-Simple Shopping app allows user to add/customize their products and but other products.  
+Simple Shopping app which allows user to Add/Customize their products and Buy other products.  
+
+## Stack  
+1. Frontend :  Flutter
+
+2. Packages :
+    * <a href="https://pub.dev/packages/provider">provider ^5.0.0</a>
+    * <a href="https://pub.dev/packages/http"> http ^0.13.3</a>
+    * <a href="https://pub.dev/packages/shared_preferences"> shared_preferences ^2.0.6</a>
+
+3. Backend :  Firebase
 
 ## Features
   | Login/SignUp | Preview Products | Add to Cart and Order |
