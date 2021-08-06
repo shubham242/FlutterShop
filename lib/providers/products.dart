@@ -29,7 +29,7 @@ class Products with ChangeNotifier {
             'https://shop-app-af659-default-rtdb.firebaseio.com/products.json?auth=$authToken');
     try {
       final res = await http.get(url);
-      final data = json.decode(res.body) as Map<String, dynamic>?;
+      final data = json.decode(res.body) as Map<String, dynamic>;
       if (data == null) return;
       Uri url2 = Uri.parse(
           'https://shop-app-af659-default-rtdb.firebaseio.com/userFavorites/$userId.json?auth=$authToken');

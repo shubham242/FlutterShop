@@ -8,20 +8,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
-  String _token = '';
-  DateTime? _expiry;
-  String _userId = '';
-  Timer? _authTimer;
+  String _token;
+  DateTime _expiry;
+  String _userId;
+  Timer _authTimer;
 
   bool get isAuth {
-    return token != '';
+    return token != null;
   }
 
   String get token {
-    if (_expiry != null && _expiry!.isAfter(DateTime.now()) && _token != '') {
+    if (_expiry != null && _expiry.isAfter(DateTime.now()) && _token != null) {
       return _token;
     }
-    return '';
+    return null;
   }
 
   String get userId {
@@ -78,7 +78,7 @@ class Auth with ChangeNotifier {
     if (!prefs.containsKey('userData')) {
       return false;
     }
-    final extractedUserData = json.decode(prefs.getString('userData')!);
+    final extractedUserData = json.decode(prefs.getString('userData'));
     final expiryDate = DateTime.parse(extractedUserData['expiry'].toString());
 
     if (expiryDate.isBefore(DateTime.now())) {
@@ -118,7 +118,7 @@ class Auth with ChangeNotifier {
     if (_authTimer != null) {
       _authTimer?.cancel();
     }
-    final timeToExp = _expiry?.difference(DateTime.now()).inSeconds;
-    _authTimer = Timer(Duration(seconds: timeToExp!), logout);
+    final timeToExp = _expiry.difference(DateTime.now()).inSeconds;
+    _authTimer = Timer(Duration(seconds: timeToExp), logout);
   }
 }

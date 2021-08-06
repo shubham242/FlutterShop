@@ -6,14 +6,13 @@ import '../providers/cart.dart';
 import './cart_screen.dart';
 import '../widgets/badge.dart';
 import '../widgets/buying.dart';
-import '../widgets/show_alert.dart';
 
 class ProductDetail extends StatelessWidget {
   static const routeName = '/product-detail';
 
   @override
   Widget build(BuildContext context) {
-    final productId = ModalRoute.of(context)?.settings.arguments as String;
+    final productId = ModalRoute.of(context).settings.arguments as String;
     final product = Provider.of<Products>(
       context,
       listen: false,
@@ -25,7 +24,7 @@ class ProductDetail extends StatelessWidget {
         actions: [
           Consumer<Cart>(
             builder: (_, cart, ch) => Badge(
-              child: ch!,
+              child: ch,
               value: cart.itemCount.toString(),
             ),
             child: IconButton(

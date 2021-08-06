@@ -110,7 +110,7 @@ class _OrderButtonState extends State<OrderButton> {
               'Place Order',
               style: TextStyle(
                   fontSize: 16,
-                  color: Theme.of(context).primaryTextTheme.title?.color),
+                  color: Theme.of(context).primaryTextTheme.title.color),
             ),
     );
   }

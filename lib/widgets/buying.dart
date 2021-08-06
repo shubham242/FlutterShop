@@ -8,7 +8,7 @@ import '../providers/auth.dart';
 class Buying extends StatelessWidget {
   Widget buildBtn(
     BuildContext context,
-    Color? color,
+    Color color,
     Color textColor,
     String title,
     Function press,

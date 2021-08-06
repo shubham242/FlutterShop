@@ -5,7 +5,6 @@ import '../screens/product_detail_screen.dart';
 import '../providers/product.dart';
 import '../providers/cart.dart';
 import '../providers/auth.dart';
-import '../widgets/show_alert.dart';
 
 class ProductItem extends StatelessWidget {
   @override

@@ -14,7 +14,7 @@ class _EditProductState extends State<EditProducts> {
   final TextEditingController _imageUrlCont = TextEditingController();
   final _form = GlobalKey<FormState>();
   var _newProduct = Product(
-    id: '',
+    id: null,
     title: '',
     description: '',
     price: 0,
@@ -47,7 +47,7 @@ class _EditProductState extends State<EditProducts> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)?.settings.arguments as String?;
+      final productId = ModalRoute.of(context).settings.arguments as String;
       if (productId != null) {
         _newProduct =
             Provider.of<Products>(context, listen: false).findById(productId);
@@ -66,7 +66,7 @@ class _EditProductState extends State<EditProducts> {
 
   Future<void> _saveForm() async {
     final isValid = _form.currentState?.validate();
-    if (!isValid!) {
+    if (!isValid) {
       return;
     }
     _form.currentState?.save();
@@ -99,12 +99,6 @@ class _EditProductState extends State<EditProducts> {
             ],
           ),
         );
-        // } finally {
-        //   print('object');
-        //   setState(() {
-        //     _isLoading = false;
-        //   });
-        // Navigator.of(context).pop();
       }
       setState(() {
         _isLoading = false;
@@ -160,7 +154,7 @@ class _EditProductState extends State<EditProducts> {
                           decoration: InputDecoration(labelText: 'Title'),
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return 'Please Enter a Title.';
                             }
                             return null;
@@ -169,7 +163,7 @@ class _EditProductState extends State<EditProducts> {
                             _newProduct = Product(
                               id: _newProduct.id,
                               isFav: _newProduct.isFav,
-                              title: value!,
+                              title: value,
                               description: _newProduct.description,
                               price: _newProduct.price,
                               imageUrl: _newProduct.imageUrl,
@@ -182,7 +176,7 @@ class _EditProductState extends State<EditProducts> {
                           keyboardType: TextInputType.number,
                           textInputAction: TextInputAction.next,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return 'Please Enter a Price.';
                             }
                             if (double.tryParse(value) == null) {
@@ -199,7 +193,7 @@ class _EditProductState extends State<EditProducts> {
                               isFav: _newProduct.isFav,
                               title: _newProduct.title,
                               description: _newProduct.description,
-                              price: double.parse(value!),
+                              price: double.parse(value),
                               imageUrl: _newProduct.imageUrl,
                             );
                           },
@@ -211,7 +205,7 @@ class _EditProductState extends State<EditProducts> {
                           keyboardType: TextInputType.multiline,
                           textInputAction: TextInputAction.done,
                           validator: (value) {
-                            if (value!.isEmpty) {
+                            if (value.isEmpty) {
                               return 'Please Enter a Description.';
                             }
 
@@ -222,7 +216,7 @@ class _EditProductState extends State<EditProducts> {
                               id: _newProduct.id,
                               isFav: _newProduct.isFav,
                               title: _newProduct.title,
-                              description: value!,
+                              description: value,
                               price: _newProduct.price,
                               imageUrl: _newProduct.imageUrl,
                             );
@@ -256,7 +250,7 @@ class _EditProductState extends State<EditProducts> {
                                 textInputAction: TextInputAction.done,
                                 controller: _imageUrlCont,
                                 validator: (value) {
-                                  if (value!.isEmpty) {
+                                  if (value.isEmpty) {
                                     return 'Please enter an image URL.';
                                   }
                                   if (!value.startsWith('http') &&
@@ -280,7 +274,7 @@ class _EditProductState extends State<EditProducts> {
                                     title: _newProduct.title,
                                     description: _newProduct.description,
                                     price: _newProduct.price,
-                                    imageUrl: value!,
+                                    imageUrl: value,
                                   );
                                 },
                               ),

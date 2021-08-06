@@ -46,7 +46,7 @@ class _ProductsOverviewState extends State<ProductsOverview> {
         actions: [
           Consumer<Cart>(
             builder: (_, cart, ch) => Badge(
-              child: ch!,
+              child: ch,
               value: cart.itemCount.toString(),
             ),
             child: IconButton(

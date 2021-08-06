@@ -88,7 +88,7 @@ class AuthScreen extends StatelessWidget {
 
 class AuthCard extends StatefulWidget {
   const AuthCard({
-    Key? key,
+    Key key,
   }) : super(key: key);
 
   @override
@@ -104,6 +104,7 @@ class _AuthCardState extends State<AuthCard> {
   };
   var _isLoading = false;
   final _passwordController = TextEditingController();
+  AnimationController _controller;
 
   void _showError(String msg) {
     showDialog(
@@ -123,24 +124,24 @@ class _AuthCardState extends State<AuthCard> {
   }
 
   Future<void> _submit() async {
-    if (!_formKey.currentState!.validate()) {
+    if (!_formKey.currentState.validate()) {
       // Invalid!
       return;
     }
-    _formKey.currentState!.save();
+    _formKey.currentState.save();
     setState(() {
       _isLoading = true;
     });
     try {
       if (_authMode == AuthMode.Login) {
         await Provider.of<Auth>(context, listen: false).login(
-          _authData['email']!,
-          _authData['password']!,
+          _authData['email'],
+          _authData['password'],
         );
       } else {
         await Provider.of<Auth>(context, listen: false).signup(
-          _authData['email']!,
-          _authData['password']!,
+          _authData['email'],
+          _authData['password'],
         );
       }
     } on HttpException catch (error) {
@@ -203,13 +204,13 @@ class _AuthCardState extends State<AuthCard> {
                   decoration: InputDecoration(labelText: 'E-Mail'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
-                    if (value!.isEmpty || !value.contains('@')) {
+                    if (value.isEmpty || !value.contains('@')) {
                       return 'Invalid email!';
                     }
                     return null;
                   },
                   onSaved: (value) {
-                    _authData['email'] = value!;
+                    _authData['email'] = value;
                   },
                 ),
                 TextFormField(
@@ -217,12 +218,12 @@ class _AuthCardState extends State<AuthCard> {
                   obscureText: true,
                   controller: _passwordController,
                   validator: (value) {
-                    if (value!.isEmpty || value.length < 5) {
+                    if (value.isEmpty || value.length < 5) {
                       return 'Password is too short!';
                     }
                   },
                   onSaved: (value) {
-                    _authData['password'] = value!;
+                    _authData['password'] = value;
                   },
                 ),
                 if (_authMode == AuthMode.Signup)

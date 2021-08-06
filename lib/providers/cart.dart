@@ -8,11 +8,11 @@ class CartItem {
   final String imageUrl;
 
   CartItem({
-    required this.id,
-    required this.title,
-    required this.quantity,
-    required this.price,
-    required this.imageUrl,
+    @required this.id,
+    @required this.title,
+    @required this.quantity,
+    @required this.price,
+    @required this.imageUrl,
   });
 }
 
@@ -97,7 +97,7 @@ class Cart with ChangeNotifier {
     if (!_items.containsKey(productId)) {
       return;
     }
-    if (_items[productId]!.quantity > 1) {
+    if (_items[productId].quantity > 1) {
       _items.update(
         productId,
         (value) => CartItem(

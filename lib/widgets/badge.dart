@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 
 class Badge extends StatelessWidget {
   const Badge({
-    required this.child,
-    required this.value,
+    @required this.child,
+    @required this.value,
     this.color,
   });
 
   final Widget child;
   final String value;
-  final Color? color;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
