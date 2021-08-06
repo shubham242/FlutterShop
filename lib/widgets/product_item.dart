@@ -27,9 +27,13 @@ class ProductItem extends StatelessWidget {
               },
               child: Container(
                 color: Colors.white,
-                child: Image.network(
-                  product.imageUrl,
-                  fit: BoxFit.contain,
+                child: Hero(
+                  tag: '${product.id}tag',
+                  child: FadeInImage(
+                    placeholder: AssetImage('assets/images/placeholder.png'),
+                    image: NetworkImage(product.imageUrl),
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             ),

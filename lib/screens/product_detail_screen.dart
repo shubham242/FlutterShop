@@ -100,7 +100,10 @@ class ProductDetail extends StatelessWidget {
                 color: Colors.white,
                 height: MediaQuery.of(context).size.height * 0.5,
                 alignment: Alignment.center,
-                child: Image.network(product.imageUrl),
+                child: Hero(
+                  tag: '${product.id}tag',
+                  child: Image.network(product.imageUrl),
+                ),
               ),
             ),
             Card(
