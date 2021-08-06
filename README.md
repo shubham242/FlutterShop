@@ -11,7 +11,7 @@ Simple Shopping app which allows user to Add/Customize their products and Buy ot
 3. Backend : &nbsp; <a href="https://firebase.google.com/">Firebase</a>
 
 ## Features
-  | Login/SignUp | Preview Products | Add to Cart and Order |
+  | Login / SignUp | Preview Products | Add to Cart and Order |
   | --- | --- | --- |
   |![Preview](https://github.com/shubham242/Shop_App/blob/main/assets/preview/login.gif) | ![Preview](https://github.com/shubham242/Shop_App/blob/main/assets/preview/product-preview.gif) | ![Preview](https://github.com/shubham242/Shop_App/blob/main/assets/preview/cart.gif) |  
   
