@@ -1,4 +1,4 @@
-# Shop_App
+# FlutterShop
 Simple Shopping app which allows user to Add/Customize their products and Buy other products.  
 
 ## Stack  
